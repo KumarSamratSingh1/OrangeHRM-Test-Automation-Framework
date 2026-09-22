@@ -48,9 +48,16 @@ public class LoginTest extends TestBase{
 	
 	@AfterMethod
 	public void tearDown(){
-		topnevigationmenupage.ClickOnUserName();
+		try {
+			if (topnevigationmenupage != null) {
+				topnevigationmenupage.ClickOnUserName();
+			}
+		} catch (Exception ignored) {
+		}
 		Log.endTestCase();
-		driver.quit();
+		if (driver != null) {
+			driver.quit();
+		}
 	}
-	
 }
+

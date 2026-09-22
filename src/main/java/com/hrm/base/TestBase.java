@@ -3,6 +3,7 @@ package com.hrm.base;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Date;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.openqa.selenium.OutputType;
@@ -20,20 +21,23 @@ import com.hrm.util.WebDriverFactory;
 
 import io.qameta.allure.Attachment;
 
-
 public class TestBase {
 
 	public static WebDriver driver;
-	protected static String appUrl = Config.getProperty("app.url.local");
+	protected static String appUrl;
 
 	public void initialization() {
-		driver=null;
-		if (driver == null) {
-			driver = WebDriverFactory.createDriver();
-			System.out.println(appUrl);
+		driver = null;
+		appUrl = Config.getProperty("app.url.local");
+		driver = WebDriverFactory.createDriver();
+		System.out.println("Navigating to URL: " + appUrl);
+		if (appUrl != null && !appUrl.isEmpty()) {
 			driver.get(appUrl);
-			driver.manage().window().maximize();
+		}
+		driver.manage().window().maximize();
+		try {
 			DOMConfigurator.configure("log4j.xml");
+		} catch (Exception ignored) {
 		}
 	}
 
@@ -43,35 +47,36 @@ public class TestBase {
 	
 	@Attachment(value = "Screenshot of {0}", type = "image/png")
 	public byte[] takeScreenShot(String ScreenShotName) throws IOException {
-
-		TakesScreenshot ts= (TakesScreenshot)driver;
-		File source= ts.getScreenshotAs(OutputType.FILE);
+		TakesScreenshot ts = (TakesScreenshot) driver;
+		File source = ts.getScreenshotAs(OutputType.FILE);
 		String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-		String dest= System.getProperty("user.dir")+ "//Screenshots//"+ScreenShotName+"_"+timestamp+".png";
+		File destDir = new File(System.getProperty("user.dir") + File.separator + "Screenshots");
+		if (!destDir.exists()) {
+			destDir.mkdirs();
+		}
+		String dest = destDir.getAbsolutePath() + File.separator + ScreenShotName + "_" + timestamp + ".png";
 
 		FileHandler.copy(source, new File(dest));
-		System.out.println("Screenshot Taken");
-		return (byte[])ts.getScreenshotAs(OutputType.BYTES);
-
+		System.out.println("Screenshot Taken: " + dest);
+		return (byte[]) ts.getScreenshotAs(OutputType.BYTES);
 	}
 
 	public void waitForElementToBeClickable(WebElement ele) {
-		new WebDriverWait(driver, 10)
-		.until(ExpectedConditions.elementToBeClickable(ele));
+		new WebDriverWait(driver, Duration.ofSeconds(10))
+				.until(ExpectedConditions.elementToBeClickable(ele));
 	}
 
 	public void setFirefoxProfile() {
-		
-		driver=null;
+		driver = null;
+		appUrl = Config.getProperty("app.url.local");
 		System.out.println("Opening firefox browser");
-		System.setProperty("webdriver.gecko.driver", System.getProperty("user.dir")+"\\Drivers\\geckodriver.exe");
 		FirefoxProfile profile = new FirefoxProfile();
 
-		//Set Location to store files after downloading.
-		profile.setPreference("browser.download.dir", System.getProperty("user.dir")+"\\Download_Resume");
+		// Set Location to store files after downloading.
+		profile.setPreference("browser.download.dir", System.getProperty("user.dir") + File.separator + "Download_Resume");
 		profile.setPreference("browser.download.folderList", 2);
 
-		profile.setPreference( "browser.download.manager.showWhenStarting", false );
+		profile.setPreference("browser.download.manager.showWhenStarting", false);
 		profile.setPreference("browser.helperApps.neverAsk.openFile",
 				"text/csv,application/x-msexcel,application/excel,application/x-excel,application/vnd.ms-excel,image/png,image/jpeg,text/html,text/plain,application/msword,application/xml");
 		profile.setPreference("browser.helperApps.neverAsk.saveToDisk",
@@ -82,24 +87,32 @@ public class TestBase {
 		profile.setPreference("browser.download.manager.useWindow", false);
 		profile.setPreference("browser.download.manager.showAlertOnComplete", false);
 		profile.setPreference("browser.download.manager.closeWhenDone", false);
-		FirefoxOptions option=new FirefoxOptions();
+		FirefoxOptions option = new FirefoxOptions();
 		option.setProfile(profile);
-		//Pass FProfile parameter In webdriver to use preferences to download file.
 		driver = new FirefoxDriver(option);
-		driver.get(appUrl);
+		if (appUrl != null && !appUrl.isEmpty()) {
+			driver.get(appUrl);
+		}
 		driver.manage().window().maximize();
-		DOMConfigurator.configure("log4j.xml");
+		try {
+			DOMConfigurator.configure("log4j.xml");
+		} catch (Exception ignored) {
+		}
 	}
 	
 	@Attachment(value = "Screenshot of {0}", type = "image/png")
 	public byte[] takeScreenShotForFailedTestCase(String ScreenShotName) throws IOException {
-		TakesScreenshot ts= (TakesScreenshot)driver;
-		File source= ts.getScreenshotAs(OutputType.FILE);
+		TakesScreenshot ts = (TakesScreenshot) driver;
+		File source = ts.getScreenshotAs(OutputType.FILE);
 		String timestamp = new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-		String dest= System.getProperty("user.dir")+ "//Screenshots//FailedTestCase//"+ScreenShotName+"_"+timestamp+".png";
+		File destDir = new File(System.getProperty("user.dir") + File.separator + "Screenshots" + File.separator + "FailedTestCase");
+		if (!destDir.exists()) {
+			destDir.mkdirs();
+		}
+		String dest = destDir.getAbsolutePath() + File.separator + ScreenShotName + "_" + timestamp + ".png";
 
 		FileHandler.copy(source, new File(dest));
-		System.out.println("Screenshot Taken");
-		return (byte[])ts.getScreenshotAs(OutputType.BYTES);
+		System.out.println("Screenshot Taken: " + dest);
+		return (byte[]) ts.getScreenshotAs(OutputType.BYTES);
 	}
 }

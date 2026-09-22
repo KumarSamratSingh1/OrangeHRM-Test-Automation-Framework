@@ -7,15 +7,16 @@ import org.testng.IAnnotationTransformer;
 import org.testng.IRetryAnalyzer;
 import org.testng.annotations.ITestAnnotation;
 
-public class RetryListener implements IAnnotationTransformer{
+public class RetryListener implements IAnnotationTransformer {
 	@Override
+	@SuppressWarnings("rawtypes")
 	public void transform(ITestAnnotation testannotation, Class testClass,
-			Constructor testConstructor, Method testMethod)	{
-		IRetryAnalyzer retry = testannotation.getRetryAnalyzer();
+			Constructor testConstructor, Method testMethod) {
+		Class<? extends IRetryAnalyzer> retry = testannotation.getRetryAnalyzerClass();
 
-		if (retry == null)	{
+		if (retry == null) {
 			testannotation.setRetryAnalyzer(Retry.class);
 		}
-
 	}
 }
+

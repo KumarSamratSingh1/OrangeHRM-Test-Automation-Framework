@@ -1,5 +1,7 @@
 package com.hrm.util;
 
+import java.io.File;
+
 public class TestConfig {
 	
 		public static final String Frist_Name = "Rajkumar";
@@ -9,9 +11,9 @@ public class TestConfig {
 		public static final String Middle_Name = "Shankar";
 		public static final String Last_Name = "Dhoni";
 		public static final String User_Name = "rajkumar";
-		public static final String Password = "raj123";
-		public static final String Confirm_Password = "raj123";
-		public static final String Photograph = "D:\\OrangeHRM\\Dhoni.jpg";
+		public static final String Password = "SamplePassword123!";
+		public static final String Confirm_Password = "SamplePassword123!";
+		public static final String Photograph = System.getProperty("user.dir") + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator + "com" + File.separator + "hrm" + File.separator + "testdata" + File.separator + "Dhoni.jpg";
 		public static final String ReportName = "Msys Report";
 		public static final String EditReportName = "Msys Report Edit";
 		public static final String Employee_Name = "Pallavi Yadav";
@@ -53,18 +55,7 @@ public class TestConfig {
 		public static final String CANDIDATE_DATE_OF_APPLICATION_FROM="2017/07/13";
 		public static final String CANDIDATE_DATE_OF_APPLICATION_TO="2018/06/06";		
 		
-		
-		
-	// Testlink integration with eclipse
-		 public static final String SERVER_URL = "http://192.168.102.26:81/testlink/lib/api/xmlrpc/v1/xmlrpc.php";
-		 public static String API_KEY = "5946f39bee06f0ba104a1b7b6474dd77";
-		 
-		 public static final String PROJECT_NAME = "Msys_HRMS";
-		 public static String TEST_PLAN_NAME = "Msys_HRMS";
-		 public static String BUILD_NAME = "HRMSDemo";
-		 
-		 
 		//Admin Tab
-		 public static final String AdminUser_Name = "Msys123";
+		public static final String AdminUser_Name = "Msys123";
 		
 }
