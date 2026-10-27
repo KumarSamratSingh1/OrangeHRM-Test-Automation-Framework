@@ -24,11 +24,13 @@ public class LoginPage extends TestBase{
 	
 	//Enter username in username textbox
 	public void setUserName(String userName){
+		LoginUserName.clear();
 		LoginUserName.sendKeys(userName);
     }
     
 	//Set password in password textbox
     public void setPassword(String password){
+      LoginPassword.clear();
       LoginPassword.sendKeys(password);
     }
 

@@ -1,15 +1,131 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Suite">
-<!--   <listeners>
-        <listener class-name="com.hrm.util.ExtentReporterNG"/>
-  	    <listener class-name="com.hrm.util.TestListener"/>
-        <listener class-name="com.hrm.util.RetryListener"/>
- </listeners>  -->
- 
-  <test name="Test">
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Orange HRM Complete Automation Test Suite" verbose="1">
+  <listeners>
+    <listener class-name="com.hrm.util.ExtentReporterNG"/>
+    <listener class-name="com.hrm.util.TestListener"/>
+    <listener class-name="com.hrm.util.RetryListener"/>
+  </listeners>
+
+  <test name="All Modules Test" preserve-order="true">
     <classes>
+      <!-- Authentication (1 classes) -->
       <class name="com.hrm.testcases.LoginTest"/>
+      <!-- Admin Module (31 classes) -->
+      <class name="com.hrm.testcases.AdminTab.Adding_Nationality"/>
+      <class name="com.hrm.testcases.AdminTab.AddingEducation"/>
+      <class name="com.hrm.testcases.AdminTab.AddingEmploymentStatus"/>
+      <class name="com.hrm.testcases.AdminTab.AddingLanguage"/>
+      <class name="com.hrm.testcases.AdminTab.AddingOrganizationGeneralinfo"/>
+      <class name="com.hrm.testcases.AdminTab.AddingOrganizationLocation"/>
+      <class name="com.hrm.testcases.AdminTab.AddingPayGradeFunctionality"/>
+      <class name="com.hrm.testcases.AdminTab.AddingSkills"/>
+      <class name="com.hrm.testcases.AdminTab.AddingSocialMediaAuthentication"/>
+      <class name="com.hrm.testcases.AdminTab.AddJobFunctionality"/>
+      <class name="com.hrm.testcases.AdminTab.AddUserFunctinality"/>
+      <class name="com.hrm.testcases.AdminTab.AddWorkShiftFunctionality"/>
+      <class name="com.hrm.testcases.AdminTab.AssigningWorkShiftToEmp"/>
+      <class name="com.hrm.testcases.AdminTab.DeleteEducation"/>
+      <class name="com.hrm.testcases.AdminTab.DeleteEmploymentStatus"/>
+      <class name="com.hrm.testcases.AdminTab.DeleteJobCategory"/>
+      <class name="com.hrm.testcases.AdminTab.DeleteUserFunctionality"/>
+      <class name="com.hrm.testcases.AdminTab.DeleteWorkShift"/>
+      <class name="com.hrm.testcases.AdminTab.Deleting_Nationality"/>
+      <class name="com.hrm.testcases.AdminTab.DeletingLanguage"/>
+      <class name="com.hrm.testcases.AdminTab.DeletingOrganizationLocation"/>
+      <class name="com.hrm.testcases.AdminTab.DeletingPayGradeFunctionality"/>
+      <class name="com.hrm.testcases.AdminTab.DeletingSkill"/>
+      <class name="com.hrm.testcases.AdminTab.DeletingSocialMediaAuthentication"/>
+      <class name="com.hrm.testcases.AdminTab.EditLocalizationFunctionality"/>
+      <class name="com.hrm.testcases.AdminTab.RemovingAssignedWorkShiftOfEmp"/>
+      <class name="com.hrm.testcases.AdminTab.ResetBtnFunctionality"/>
+      <class name="com.hrm.testcases.AdminTab.SearchInvalidLocationFunctinality"/>
+      <class name="com.hrm.testcases.AdminTab.SearchLocationFunctionality"/>
+      <class name="com.hrm.testcases.AdminTab.SearchUserFunctionality"/>
+      <class name="com.hrm.testcases.AdminTab.SearchUserwithInvalidCredentials"/>
+      <!-- PIM Module (21 classes) -->
+      <class name="com.hrm.testcases.PIMTab.FunctionalityofAddButtononEmployeeInformationPage"/>
+      <class name="com.hrm.testcases.PIMTab.FunctionalityofAddEmployee"/>
+      <class name="com.hrm.testcases.PIMTab.FunctionalityofAddReports"/>
+      <class name="com.hrm.testcases.PIMTab.FunctionalityofCancelButtononOrangeHRMConfirmationRequiredwindow"/>
+      <class name="com.hrm.testcases.PIMTab.FunctionalityofCrossButtononOrangeHRMConfirmationRequiredwindowforReports"/>
+      <class name="com.hrm.testcases.PIMTab.FunctionalityofDeleteButtononEmployeeInformationPage"/>
+      <class name="com.hrm.testcases.PIMTab.FunctionalityofDeleteButtononEmployeeReportsPage"/>
+      <class name="com.hrm.testcases.PIMTab.FunctionalityofEditButtononEmployeeReportsPage"/>
+      <class name="com.hrm.testcases.PIMTab.FunctionalityofmployeeList"/>
+      <class name="com.hrm.testcases.PIMTab.FunctionalityofOKButtononOrangeHRMConfirmationRequiredwindow"/>
+      <class name="com.hrm.testcases.PIMTab.FunctionalityofOKButtononOrangeHRMConfirmationRequiredwindowforReports"/>
+      <class name="com.hrm.testcases.PIMTab.FunctionalityofReports"/>
+      <class name="com.hrm.testcases.PIMTab.FunctionalityofResetButtonbyEmployeeNameonEmployeeInformationPage"/>
+      <class name="com.hrm.testcases.PIMTab.FunctionalityofResetButtononEmployeeReportsPage"/>
+      <class name="com.hrm.testcases.PIMTab.FunctionalityofRunButtononEmployeeReportsPage"/>
+      <class name="com.hrm.testcases.PIMTab.FunctionalityofSaveReports"/>
+      <class name="com.hrm.testcases.PIMTab.FunctionalityofSearchButtonbyEmployeenameonEmployeeInformationPage"/>
+      <class name="com.hrm.testcases.PIMTab.FunctionalityofSearchButtonbyEmployeIdonEmployeeInformationPage"/>
+      <class name="com.hrm.testcases.PIMTab.FunctionalityofSearchButtonbySupervisorNameonEmployeeInformationPage"/>
+      <class name="com.hrm.testcases.PIMTab.FunctionalityofSearchButtononEmployeeReportsPage"/>
+      <class name="com.hrm.testcases.PIMTab.VerifyPIMTab"/>
+      <!-- Recruitment Module (20 classes) -->
+      <class name="com.hrm.testcases.Recruitment.AddCandidate"/>
+      <class name="com.hrm.testcases.Recruitment.AddJobVacancies"/>
+      <class name="com.hrm.testcases.Recruitment.DeleteCandidate"/>
+      <class name="com.hrm.testcases.Recruitment.DeleteJobVacancy"/>
+      <class name="com.hrm.testcases.Recruitment.DownnloadCandidateResume"/>
+      <class name="com.hrm.testcases.Recruitment.ModifyCandidateData_CandidateTab"/>
+      <class name="com.hrm.testcases.Recruitment.ModifyJobVacancyData_VacancyTab"/>
+      <class name="com.hrm.testcases.Recruitment.ResetFunctionality_CandidateTab"/>
+      <class name="com.hrm.testcases.Recruitment.ResetFunctionality_VacancyTab"/>
+      <class name="com.hrm.testcases.Recruitment.SearchCandidate_DateOfApplication"/>
+      <class name="com.hrm.testcases.Recruitment.SearchCandidate_HiringManager"/>
+      <class name="com.hrm.testcases.Recruitment.SearchCandidate_JobTitle"/>
+      <class name="com.hrm.testcases.Recruitment.SearchCandidate_Status"/>
+      <class name="com.hrm.testcases.Recruitment.SearchCandidate_VacancyName"/>
+      <class name="com.hrm.testcases.Recruitment.SearchJobVacancy_HiringManager"/>
+      <class name="com.hrm.testcases.Recruitment.SearchJobVacancy_JobTitle"/>
+      <class name="com.hrm.testcases.Recruitment.SearchJobVacancy_Status"/>
+      <class name="com.hrm.testcases.Recruitment.SearchJobVacancy_VacancyName"/>
+      <class name="com.hrm.testcases.Recruitment.VerifyCandidatesTab"/>
+      <class name="com.hrm.testcases.Recruitment.VerifyRecruitmentTab"/>
+      <!-- Performance Module (19 classes) -->
+      <class name="com.hrm.testcases.PerformancePage.AddKeyPerformanceIndicator"/>
+      <class name="com.hrm.testcases.PerformancePage.CancleToFillInfoOf_KeyPerformanceIndicator"/>
+      <class name="com.hrm.testcases.PerformancePage.DeleteKPIsFromTable"/>
+      <class name="com.hrm.testcases.PerformancePage.EmployeeTrackers_OpenCommentBox"/>
+      <class name="com.hrm.testcases.PerformancePage.EmpTrackers_AddEmpTrakerLog"/>
+      <class name="com.hrm.testcases.PerformancePage.EmpTrackers_CancletofillInfo"/>
+      <class name="com.hrm.testcases.PerformancePage.EmpTrackers_UpdateEmpTrakerLog"/>
+      <class name="com.hrm.testcases.PerformancePage.ManageReview_ResetPerformanceReview"/>
+      <class name="com.hrm.testcases.PerformancePage.SearchKeyPerformaceIndicator"/>
+      <class name="com.hrm.testcases.PerformancePage.Trackers_AddPerformanceTracker"/>
+      <class name="com.hrm.testcases.PerformancePage.Trackers_AddReviewersInAssignedReviewers"/>
+      <class name="com.hrm.testcases.PerformancePage.Trackers_CancleFillInfoOfPerformaceTracker"/>
+      <class name="com.hrm.testcases.PerformancePage.Trackers_DeleteRecords"/>
+      <class name="com.hrm.testcases.PerformancePage.Trackers_RemoveAssingedReviewers"/>
+      <class name="com.hrm.testcases.PerformancePage.Trackers_UpdateEmployeePerformanceRecord"/>
+      <class name="com.hrm.testcases.PerformancePage.UpdateKPIsRecord"/>
+      <class name="com.hrm.testcases.PerformancePage.VerifyManageReviewSubtabs"/>
+      <class name="com.hrm.testcases.PerformancePage.VerifyPerformanceTab"/>
+      <class name="com.hrm.testcases.PerformancePage.VerifySubtabsPresentInConfigureTab"/>
+      <!-- My Info Module (20 classes) -->
+      <class name="com.hrm.MyInfoTab.MyInfo_AddDependents"/>
+      <class name="com.hrm.MyInfoTab.MyInfo_AddEmergencyContact"/>
+      <class name="com.hrm.MyInfoTab.MyInfo_AddImmigrationDetailsTest"/>
+      <class name="com.hrm.MyInfoTab.MyInfo_AddLanguage"/>
+      <class name="com.hrm.MyInfoTab.MyInfo_AddMembership"/>
+      <class name="com.hrm.MyInfoTab.MyInfo_AddQualification_WorkExperience"/>
+      <class name="com.hrm.MyInfoTab.MyInfo_ChangeProfilePictureValidation"/>
+      <class name="com.hrm.MyInfoTab.MyInfo_CheckJobSection"/>
+      <class name="com.hrm.MyInfoTab.MyInfo_CheckReportsToSection"/>
+      <class name="com.hrm.MyInfoTab.MyInfo_CheckSalarySection"/>
+      <class name="com.hrm.MyInfoTab.MyInfo_DeleteDependent"/>
+      <class name="com.hrm.MyInfoTab.MyInfo_DeleteEmergencyContact"/>
+      <class name="com.hrm.MyInfoTab.MyInfo_DeleteImmigrationDetails"/>
+      <class name="com.hrm.MyInfoTab.MyInfo_DeleteLanguage"/>
+      <class name="com.hrm.MyInfoTab.MyInfo_DeleteMembership"/>
+      <class name="com.hrm.MyInfoTab.MyInfo_DeleteWorkExperience"/>
+      <class name="com.hrm.MyInfoTab.MyInfo_EditContactDetailsTest"/>
+      <class name="com.hrm.MyInfoTab.MyInfo_EditPersonalDetails"/>
+      <class name="com.hrm.MyInfoTab.MyInfoNavigationTest"/>
+      <class name="com.hrm.MyInfoTab.ValidationOfEmployeeName"/>
     </classes>
-  </test> <!-- Test -->
-</suite> <!-- Suite -->
+  </test>
+</suite>

@@ -29,8 +29,8 @@
 		<commons-io.version>2.18.0</commons-io.version>
 		<commons-lang3.version>3.17.0</commons-lang3.version>
 
-		<!-- Suite configuration: default is the full suite, can be overridden via -DsuiteXmlFile=testng.xml -->
-		<suiteXmlFile>testng_all_hrms.xml</suiteXmlFile>
+		<!-- Suite configuration: default is the complete suite testng.xml -->
+		<suiteXmlFile>testng.xml</suiteXmlFile>
 	</properties>
 
 	<dependencies>

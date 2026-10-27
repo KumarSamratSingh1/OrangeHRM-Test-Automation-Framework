@@ -14,7 +14,7 @@ public class RetryListener implements IAnnotationTransformer {
 			Constructor testConstructor, Method testMethod) {
 		Class<? extends IRetryAnalyzer> retry = testannotation.getRetryAnalyzerClass();
 
-		if (retry == null) {
+		if (retry == null || retry.getName().contains("DisabledRetryAnalyzer")) {
 			testannotation.setRetryAnalyzer(Retry.class);
 		}
 	}

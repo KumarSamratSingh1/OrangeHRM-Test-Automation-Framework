@@ -53,17 +53,17 @@ public class Config {
 			return sysProp.trim();
 		}
 
-		// 2. Check Environment variable (e.g. APP_URL_LOCAL for app.url.local)
+		// 2. Check loaded properties (config.local.properties > config.properties)
+		String value = prop.getProperty(key);
+		if (value != null && !value.trim().isEmpty()) {
+			return value.trim();
+		}
+
+		// 3. Check Environment variable (e.g. APP_URL_LOCAL for app.url.local)
 		String envKey = key.toUpperCase().replace('.', '_');
 		String envVal = System.getenv(envKey);
 		if (envVal != null && !envVal.trim().isEmpty()) {
 			return envVal.trim();
-		}
-
-		// 3. Check loaded properties (config.local.properties > config.properties)
-		String value = prop.getProperty(key);
-		if (value != null && !value.trim().isEmpty()) {
-			return value.trim();
 		}
 
 		System.out.println(key + " is not present in configuration");
