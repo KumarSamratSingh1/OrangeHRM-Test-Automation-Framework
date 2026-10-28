@@ -47,7 +47,7 @@ public class RecruitmentPage extends TestBase{
 	@FindBy(id="dialogDeleteBtn")
 	WebElement confirmation_OKbutton;
 	
-	@FindBy(className="btn reset")
+	@FindBy(css=".btn.reset")
 	WebElement confirmation_Cancelbutton;
 	
 	// Add Job vacancies page webelements

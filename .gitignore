@@ -32,6 +32,9 @@ effective-pom
 # Local configuration & credentials
 config.local.properties
 *.local.properties
+.env
+.env.*
+*.env
 
 # Run artifacts & downloads
 /Screenshots/
@@ -40,4 +43,16 @@ Screenshots/
 Download_Resume/
 allure-results/
 allure-report/
+
+# Temporary, scratch & generated test reports
+scratch/
+Final_Project_Report/
+testng-failed.xml
+*.tmp
+*.temp
+*.swp
+
+# OS & Editor files
+.DS_Store
+Thumbs.db
 

@@ -26,6 +26,8 @@
 		<log4j.version>2.24.3</log4j.version>
 		<allure.version>2.29.0</allure.version>
 		<aspectj.version>1.9.22.1</aspectj.version>
+		<restassured.version>5.5.1</restassured.version>
+		<jackson.version>2.18.2</jackson.version>
 		<commons-io.version>2.18.0</commons-io.version>
 		<commons-lang3.version>3.17.0</commons-lang3.version>
 
@@ -102,6 +104,18 @@
 			<artifactId>allure-testng</artifactId>
 			<version>${allure.version}</version>
 		</dependency>
+		<!-- Rest Assured for API Testing -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${restassured.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

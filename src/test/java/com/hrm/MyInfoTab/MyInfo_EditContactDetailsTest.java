@@ -41,7 +41,7 @@ Log.info("Naviagting to Contact Details Section");
 		Log.info("Trying to Edit the contact Details");
 		myinfo.editContactDetails(address, city, state, zip, country, mobile);
 		
-		Assert.assertEquals(myinfo.ContactDetailsChangeSuccessCheck(),"Edit");
+		Assert.assertTrue(myinfo.ContactDetailsChangeSuccessCheck(), "Contact details save did not revert button to Edit state");
 
 	}
 	

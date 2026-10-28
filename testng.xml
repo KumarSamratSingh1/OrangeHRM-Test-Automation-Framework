@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <suite name="Orange HRM Complete Automation Test Suite" verbose="1">
   <listeners>
     <listener class-name="com.hrm.util.ExtentReporterNG"/>
@@ -126,6 +126,12 @@
       <class name="com.hrm.MyInfoTab.MyInfo_EditPersonalDetails"/>
       <class name="com.hrm.MyInfoTab.MyInfoNavigationTest"/>
       <class name="com.hrm.MyInfoTab.ValidationOfEmployeeName"/>
+    </classes>
+  </test>
+
+  <test name="REST Assured API Tests" preserve-order="true">
+    <classes>
+      <class name="com.hrm.api.OrangeHRMApiTest"/>
     </classes>
   </test>
 </suite>

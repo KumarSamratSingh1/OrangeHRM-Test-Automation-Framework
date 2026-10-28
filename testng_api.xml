@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="OrangeHRM API Test Suite" verbose="1">
+  <listeners>
+    <listener class-name="com.hrm.util.ExtentReporterNG"/>
+    <listener class-name="com.hrm.util.TestListener"/>
+  </listeners>
+
+  <test name="REST Assured API Tests" preserve-order="true">
+    <classes>
+      <class name="com.hrm.api.OrangeHRMApiTest"/>
+    </classes>
+  </test>
+</suite>

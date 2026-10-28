@@ -1,16 +1,41 @@
 package com.hrm.pages;
 
+import java.time.Duration;
 import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.hrm.base.TestBase;
+import com.hrm.util.Log;
 
 public class MyInfoPage extends TestBase{
+	
+	// Reusable wait helper
+	private WebDriverWait getWait() {
+		return new WebDriverWait(driver, Duration.ofSeconds(15));
+	}
+	
+	// Reusable success message locator — OrangeHRM 4.0 uses 'message success' class
+	private boolean isSuccessMessageDisplayed() {
+		try {
+			WebElement msg = getWait().until(
+				ExpectedConditions.visibilityOfElementLocated(
+					By.xpath("//*[contains(@class,'message success') or contains(@class,'success-tip')]")
+				)
+			);
+			Log.info("Success message displayed: " + msg.getText());
+			return msg.isDisplayed();
+		} catch (Exception e) {
+			Log.warn("Success message not found: " + e.getMessage());
+			return false;
+		}
+	}
 	
 	public MyInfoPage()
 	{
@@ -122,9 +147,30 @@ public class MyInfoPage extends TestBase{
 		
 	}
 	
+	/**
+	 * In OrangeHRM 4.0, after saving personal details, the Save button reverts to 'Edit'.
+	 * We verify the save was successful by checking the button value returns to 'Edit'.
+	 * Also checks for success message with contains() for resilience.
+	 */
 	public boolean personalDetailsChangeSuccessMessage(){
-		
-		return driver.findElement(By.xpath(".//*[@id='pdMainContainer']//div[@class='message success fadable']")).isDisplayed();
+		try {
+			// Primary check: success message banner
+			getWait().until(ExpectedConditions.or(
+				ExpectedConditions.visibilityOfElementLocated(
+					By.xpath("//*[contains(@class,'message success') or contains(@class,'success-tip')]"))
+				,
+				ExpectedConditions.attributeContains(PersonalDetailsSaveButton, "value", "Edit")
+			));
+			String btnValue = PersonalDetailsSaveButton.getAttribute("value");
+			if ("Edit".equalsIgnoreCase(btnValue)) {
+				Log.info("Personal details saved — button reverted to 'Edit'");
+				return true;
+			}
+			return isSuccessMessageDisplayed();
+		} catch (Exception e) {
+			Log.warn("personalDetailsChangeSuccessMessage check failed: " + e.getMessage());
+			return false;
+		}
 	}
 	
 	@FindBy(linkText="Contact Details")
@@ -182,9 +228,20 @@ public class MyInfoPage extends TestBase{
 		ContactDetailsEditButton.click();
 	}
 	
-public String ContactDetailsChangeSuccessCheck(){
-		
-		return ContactDetailsEditButton.getAttribute("value");
+/**
+ * After saving contact details, the button reverts to 'Edit'.
+ * This is the correct assertion: assertTrue("Edit".equals(result)).
+ */
+public boolean ContactDetailsChangeSuccessCheck(){
+		try {
+			getWait().until(ExpectedConditions.attributeContains(ContactDetailsEditButton, "value", "Edit"));
+			String val = ContactDetailsEditButton.getAttribute("value");
+			Log.info("Contact Details save check — button value: " + val);
+			return "Edit".equalsIgnoreCase(val);
+		} catch (Exception e) {
+			Log.warn("ContactDetailsChangeSuccessCheck failed: " + e.getMessage());
+			return false;
+		}
 	}
 
 @FindBy(linkText="Emergency Contacts")
@@ -254,8 +311,7 @@ DeleteEmergencyContactButton.click();
 }
 
 public boolean EmergencyContactDeleteSuccessMessage(){
-	
-	return driver.findElement(By.xpath(".//div[@class='message success fadable']")).isDisplayed();
+	return isSuccessMessageDisplayed();
 }
 
 @FindBy(linkText="Dependents")
@@ -327,8 +383,7 @@ public void addDependent(String name, String relationship, String dob) throws In
 
 
 public boolean AddDependentSuccess() {
-	return driver.findElement(By.xpath(".//div[@class='message success fadable']")).isDisplayed();
-
+	return isSuccessMessageDisplayed();
 }
 
 @FindBy(id="delDependentBtn")
@@ -341,7 +396,7 @@ public void deleteDependent(String name) {
 }
 
 public boolean DependentDeleteSuccessMessage() {
-	return driver.findElement(By.xpath(".//div[@class='message success fadable']")).isDisplayed();
+	return isSuccessMessageDisplayed();
 }
 
 @FindBy(linkText="Immigration")
@@ -388,8 +443,7 @@ public void addImmigration(String doctype, String docno, String Status, String c
 }
 
 public boolean AddImmigrationSuccess() {
-	return driver.findElement(By.xpath(".//div[@class='message success fadable']")).isDisplayed();
-	
+	return isSuccessMessageDisplayed();
 }
 
 @FindBy(id="btnDelete")
@@ -401,7 +455,7 @@ public void deleteImmigrationDetails(String docType) {
 }
 
 public boolean DeleteImmigrationSuccessMessage() {
-	return driver.findElement(By.xpath(".//div[@class='message success fadable']")).isDisplayed();
+	return isSuccessMessageDisplayed();
 }
 
 @FindBy(linkText="Memberships")
@@ -442,8 +496,7 @@ public void addMembership(String membership, String paidBy, String amount, Strin
 
 
 public boolean AddMembershipSuccess() {
-	return driver.findElement(By.xpath(".//div[@class='message success fadable']")).isDisplayed();
-
+	return isSuccessMessageDisplayed();
 }
 
 public void deleteMembership(String membershipType) {
@@ -453,7 +506,7 @@ public void deleteMembership(String membershipType) {
 }
 
 public boolean MembershipDeleteSuccessMessage() {
-	return driver.findElement(By.xpath(".//div[@class='message success fadable']")).isDisplayed();
+	return isSuccessMessageDisplayed();
 }
 
 
@@ -558,7 +611,7 @@ public void addWorkExperience(String company, String jobtitle) {
 }
 
 public boolean AddWorkExperienceSuccess() {
-	return driver.findElement(By.xpath(".//div[@class='message success fadable']")).isDisplayed();
+	return isSuccessMessageDisplayed();
 }
 
 @FindBy(id="delWorkExperience")
@@ -570,7 +623,7 @@ driver.findElement(By.xpath("//a[contains(text(),'"+company+"')]/parent::td/prec
 deleteWorkExperienceButton.click();
 }
 public boolean WorkExperienceDeleteSuccessMessage() {
-	return driver.findElement(By.xpath(".//div[@class='message success fadable']")).isDisplayed();
+	return isSuccessMessageDisplayed();
 }
 
 @FindBy(id="addLanguage")
@@ -596,8 +649,7 @@ public void addLanguage(String language, String fluency, String competency) {
 }
 
 public boolean AddLanguageDetailsSuccess() {
-	return driver.findElement(By.xpath(".//div[@class='message success fadable']")).isDisplayed();
-
+	return isSuccessMessageDisplayed();
 }
 
 @FindBy(id="delLanguage")
@@ -609,8 +661,7 @@ public void deleteLanguage(String language) {
 }
 
 public boolean LanguageDeleteSuccessMessage() {
-	return driver.findElement(By.xpath(".//div[@class='message success fadable']")).isDisplayed();
-
+	return isSuccessMessageDisplayed();
 }
 
 
