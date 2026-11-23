@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="OrangeHRM Live Demonstration Suite" verbose="1">
+  <listeners>
+    <listener class-name="com.hrm.util.ExtentReporterNG"/>
+    <listener class-name="com.hrm.util.TestListener"/>
+  </listeners>
+
+  <test name="Live Demo - Core Enterprise End-to-End Scenarios" preserve-order="true">
+    <classes>
+      <!-- Module 1: Authentication & Security (Positive & Negative) -->
+      <class name="com.hrm.testcases.LoginTest"/>
+
+      <!-- Module 2: System Administration & Search Functionality -->
+      <class name="com.hrm.testcases.AdminTab.AddingOrganizationGeneralinfo"/>
+      <class name="com.hrm.testcases.AdminTab.SearchLocationFunctionality"/>
+
+      <!-- Module 3: Personnel Information Management (PIM) -->
+      <class name="com.hrm.testcases.PIMTab.VerifyPIMTab"/>
+
+      <!-- Module 4: Recruitment & Candidate Management -->
+      <class name="com.hrm.testcases.Recruitment.VerifyRecruitmentTab"/>
+
+      <!-- Module 5: My Info Self-Service & Excel-Driven Data Automation (DDT) -->
+      <class name="com.hrm.MyInfoTab.MyInfoNavigationTest"/>
+      <class name="com.hrm.MyInfoTab.MyInfo_EditPersonalDetails"/>
+      <class name="com.hrm.MyInfoTab.MyInfo_AddLanguage"/>
+
+      <!-- Module 6: Backend REST Assured API Automated Verification -->
+      <class name="com.hrm.api.OrangeHRMApiTest"/>
+    </classes>
+  </test>
+</suite>
+

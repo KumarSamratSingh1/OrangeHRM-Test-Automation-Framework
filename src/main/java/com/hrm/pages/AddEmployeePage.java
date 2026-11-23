@@ -27,6 +27,9 @@ public class AddEmployeePage extends TestBase  {
 	@FindBy(xpath="//input[@id='lastName']")
 	WebElement Lastname;
 
+	@FindBy(xpath="//input[@id='employeeId']")
+	WebElement EmployeeId;
+
 	@FindBy(xpath="//input[@id='photofile']")
 	WebElement Photograph;
 
@@ -53,6 +56,10 @@ public class AddEmployeePage extends TestBase  {
 			FistName.sendKeys(TestConfig.Frist_Name);
 			MiddleName.sendKeys(TestConfig.Middle_Name);
 			Lastname.sendKeys(TestConfig.Last_Name);
+			try {
+				EmployeeId.clear();
+				EmployeeId.sendKeys("99" + (System.currentTimeMillis() % 1000));
+			} catch (Exception e) {}
 			String PicturePath=System.getProperty("user.dir")+"\\src\\main\\java\\com\\hrm\\testdata\\Dhoni.jpg" ;
 			System.out.println(PicturePath);
 			Photograph.sendKeys(PicturePath);
@@ -60,7 +67,8 @@ public class AddEmployeePage extends TestBase  {
 			LoginCheckBox.click();
 			Thread.sleep(1000);
 			if(UserName.isDisplayed()){
-				UserName.sendKeys(TestConfig.User_Name);
+				String uName = "raj" + (System.currentTimeMillis() % 1000000);
+				UserName.sendKeys(uName);
 				Password.sendKeys(TestConfig.Password);
 				ConfirmPassword.sendKeys(TestConfig.Confirm_Password);
 				Select status = new Select(StatusDropDown);

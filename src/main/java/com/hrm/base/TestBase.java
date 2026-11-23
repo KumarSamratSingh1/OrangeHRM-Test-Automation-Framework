@@ -66,6 +66,11 @@ public class TestBase {
 				.until(ExpectedConditions.elementToBeClickable(ele));
 	}
 
+	public static WebElement waitForVisibility(WebElement ele) {
+		return new WebDriverWait(driver, Duration.ofSeconds(10))
+				.until(ExpectedConditions.visibilityOf(ele));
+	}
+
 	public void setFirefoxProfile() {
 		driver = null;
 		appUrl = Config.getProperty("app.url.local");

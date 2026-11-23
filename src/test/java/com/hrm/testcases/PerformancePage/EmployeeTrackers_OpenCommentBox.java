@@ -51,6 +51,7 @@ public class EmployeeTrackers_OpenCommentBox extends TestBase {
 			performancePage.clickTrackersSaveBtn();			
 			performancePage.AddEmployeeTrakersLog();			
 			performancePage.ReadEmployeeComment();			
+			performancePage.hoverOnPerformanceTab();
 			performancePage.hoverOnConfigureTab();
 			Log.info("Hover on Configure Tab");
 			performancePage.clickTrackersTab();

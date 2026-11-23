@@ -26,7 +26,7 @@ public class DeleteJobVacancy extends TestBase{
 		topnevigationmenupage=new TopNevigationMenuPage();
 	}
 	
-	@Test(dependsOnGroups= {"AddJobVacancy"},description="HRMS-70:Verify delete job vacancies functionality of Recruitment")
+	@Test(description="HRMS-70:Verify delete job vacancies functionality of Recruitment")
 	public void verifyJobVacancyDeleteFunctionality(){
 		try{
 			Log.startTestCase("----Job Vacanncy Delete Functionality Test Case Started");

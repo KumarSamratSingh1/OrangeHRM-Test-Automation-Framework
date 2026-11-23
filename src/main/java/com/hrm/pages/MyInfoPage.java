@@ -306,8 +306,11 @@ WebElement DeleteEmergencyContactButton;
 
 public void deletEmergencyContact(String name) 
 {
-driver.findElement(By.xpath("//a[contains(text(),'"+name+"')]/parent::td/preceding-sibling::td/input")).click();	
-DeleteEmergencyContactButton.click();
+	if (driver.findElements(By.xpath("//a[contains(text(),'"+name+"')]")).isEmpty()) {
+		addEmergencyContact(name, "Brother", "9876543211", "02066545701");
+	}
+	driver.findElement(By.xpath("//a[contains(text(),'"+name+"')]/parent::td/preceding-sibling::td/input")).click();	
+	DeleteEmergencyContactButton.click();
 }
 
 public boolean EmergencyContactDeleteSuccessMessage(){
@@ -390,9 +393,13 @@ public boolean AddDependentSuccess() {
 WebElement DeleteDependent;
 
 public void deleteDependent(String name) {
+	if (driver.findElements(By.xpath("//a[contains(text(),'"+name+"')]")).isEmpty()) {
+		try {
+			addDependent(name, "child", "2/1/1993");
+		} catch (InterruptedException ignored) {}
+	}
 	driver.findElement(By.xpath("//a[contains(text(),'"+name+"')]/parent::td/preceding-sibling::td/input")).click();	
 	DeleteDependent.click();
-	
 }
 
 public boolean DependentDeleteSuccessMessage() {
@@ -449,9 +456,11 @@ public boolean AddImmigrationSuccess() {
 @FindBy(id="btnDelete")
 WebElement DeleteImmigrationButton;
 public void deleteImmigrationDetails(String docType) {
+	if (driver.findElements(By.xpath("//a[contains(text(),'"+docType+"')]")).isEmpty()) {
+		addImmigration(docType, "P12345678", "Approved", "India");
+	}
 	driver.findElement(By.xpath("//a[contains(text(),'"+docType+"')]/parent::td/preceding-sibling::td/input")).click();	
 	DeleteImmigrationButton.click();
-	
 }
 
 public boolean DeleteImmigrationSuccessMessage() {
@@ -500,9 +509,11 @@ public boolean AddMembershipSuccess() {
 }
 
 public void deleteMembership(String membershipType) {
+	if (driver.findElements(By.xpath("//a[contains(text(),'"+membershipType+"')]")).isEmpty()) {
+		addMembership(membershipType, "Company", "100", "Indian Rupee");
+	}
 	driver.findElement(By.xpath("//a[contains(text(),'"+membershipType+"')]/parent::td/preceding-sibling::td/input")).click();	
 	DeleteMembersbutton.click();
-	
 }
 
 public boolean MembershipDeleteSuccessMessage() {
@@ -618,9 +629,11 @@ public boolean AddWorkExperienceSuccess() {
 WebElement deleteWorkExperienceButton;
 
 public void deleteWorkExperience(String company) {
-	
-driver.findElement(By.xpath("//a[contains(text(),'"+company+"')]/parent::td/preceding-sibling::td/input[6]")).click();	
-deleteWorkExperienceButton.click();
+	if (driver.findElements(By.xpath("//a[contains(text(),'"+company+"')]")).isEmpty()) {
+		addWorkExperience(company, "Software Engineer");
+	}
+	driver.findElement(By.xpath("//a[contains(text(),'"+company+"')]/parent::td/preceding-sibling::td/input[@name='delWorkExp[]' or position()=last() or @type='checkbox']")).click();	
+	deleteWorkExperienceButton.click();
 }
 public boolean WorkExperienceDeleteSuccessMessage() {
 	return isSuccessMessageDisplayed();
@@ -656,7 +669,10 @@ public boolean AddLanguageDetailsSuccess() {
 WebElement DeleteLanguageButton;
 
 public void deleteLanguage(String language) {
-	driver.findElement(By.xpath("//a[contains(text(),'"+language+"')]/parent::td/preceding-sibling::td/input[5]")).click();	
+	if (driver.findElements(By.xpath("//a[contains(text(),'"+language+"')]")).isEmpty()) {
+		addLanguage(language, "Writing", "Good");
+	}
+	driver.findElement(By.xpath("//a[contains(text(),'"+language+"')]/parent::td/preceding-sibling::td/input[@name='delLanguage[]' or position()=last() or @type='checkbox']")).click();	
 	DeleteLanguageButton.click();	
 }
 

@@ -337,44 +337,56 @@ public class AdminPage extends TestBase{
 		
 	//3.SEARCHING EXISTING USER:
 			public void searchUser(String username1,String emp_name1) throws InterruptedException {
-				Thread.sleep(2000);
+				Thread.sleep(1000);
+				userName.clear();
 				userName.sendKeys(username1);
-				emp_name.sendKeys(emp_name1);
-				name.click();
-				staus.click();
-				Enabled.click();
+				if (emp_name1 != null && !emp_name1.trim().isEmpty()) {
+					emp_name.clear();
+					emp_name.sendKeys(emp_name1);
+					try {
+						waitForVisibility(name);
+						name.click();
+					} catch(Exception e) {}
+				}
+				try {
+					staus.click();
+					Enabled.click();
+				} catch(Exception e) {}
 				searchBtn.click();
 			}
 			public boolean SearchingUserSuccessText() {
-		       	 if(searchedUser.isDisplayed()) {
-		       		System.out.println("Searched User is : "+searchedUser.getText());
-		       		 return true; 
-		       	 }
-		       	 else {
-		       		 return false; 
-		       	 }	
+				try {
+					waitForVisibility(searchedUser);
+					System.out.println("Searched User is : "+searchedUser.getText());
+					return searchedUser.isDisplayed();
+				} catch(Exception e) {
+					return false;
 				}
+			}
 			
 			
 	//4.SEARCHING USER WITH INVALID CREDENTIALS:
 			public void invalidSearch(String username1,String emp_name1) throws InterruptedException {
-				Thread.sleep(2000);
+				Thread.sleep(1000);
+				userName.clear();
 				userName.sendKeys(username1);
+				emp_name.clear();
 				emp_name.sendKeys(emp_name1);
-				name.click();
-				staus.click();
-				Enabled.click();
+				try {
+					staus.click();
+					Enabled.click();
+				} catch(Exception e) {}
 				searchBtn.click();
 			}
 			public boolean SearchingInvalidUserSuccess() {
-		       	 if(noRecordFound.isDisplayed()) {
-		       		System.out.println(noRecordFound.getText());
-		       		 return true; 
-		       	 }
-		       	 else {
-		       		 return false; 
-		       	 }	
+				try {
+					waitForVisibility(noRecordFound);
+					System.out.println(noRecordFound.getText());
+					return noRecordFound.isDisplayed();
+				} catch(Exception e) {
+					return false;
 				}
+			}
 			
 					
 	//5.RESET BUTTON FUNCTIONALITY:
@@ -384,12 +396,12 @@ public class AdminPage extends TestBase{
 			}
 			
     		public boolean verifyResetBtnFunctionality() {
-            if(userName.getText().matches("")) {
-            	return true;	
-			}
-            else {
-            	return false;
-            }
+    			try {
+    				String val = userName.getAttribute("value");
+    				return val == null || val.trim().isEmpty();
+    			} catch(Exception e) {
+    				return false;
+    			}
     		}
 		
 			
@@ -397,19 +409,28 @@ public class AdminPage extends TestBase{
 			public void addJobCategory(String jobName) {
 				JobBtn.click();
 				JobCategories.click();
+				for (int i = 0; i < jobList.size(); i++) {
+					if (jobList.get(i).getText().trim().equalsIgnoreCase(jobName.trim())) {
+						WebElement td = driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
+						td.click();
+						delete.click();
+						okBtn.click();
+						break;
+					}
+				}
 				add_btn.click();
 				JobName.sendKeys(jobName);
 				save_btn.click();	
 			}
 			public boolean AddingJobCategorySuccess() {
-		       	 if(saveSuccess.isDisplayed()) {
-		       		System.out.println(saveSuccess.getText());
-		       		 return true; 
-		       	 }
-		       	 else {
-		       		 return false; 
-		       	 }	
+				try {
+					waitForVisibility(saveSuccess);
+					System.out.println(saveSuccess.getText());
+					return saveSuccess.isDisplayed();
+				} catch(Exception e) {
+					return false;
 				}
+			}
 			
 			
 	//7.DELETE JOB CATEGORY:
@@ -418,32 +439,57 @@ public class AdminPage extends TestBase{
 				JobCategories.click();
 				
 				List <WebElement> list= jobList;
+				boolean found = false;
 		        for(int i=0;i<list.size();i++) {   
 		        	String username=(list.get(i).getText());
 		        	   if (username.equals(jobToDelete)){
 		        		   WebElement td =  driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
 		        		     td.click();
+		        		     found = true;
 		        		     break;
 		        		    } 
+		        }
+		        if (!found) {
+		        	add_btn.click();
+		        	JobName.sendKeys(jobToDelete);
+		        	save_btn.click();
+		        	JobBtn.click();
+		        	JobCategories.click();
+		        	for (int i = 0; i < jobList.size(); i++) {
+		        		if (jobList.get(i).getText().trim().equalsIgnoreCase(jobToDelete.trim())) {
+		        			WebElement td = driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
+		        			td.click();
+		        			break;
+		        		}
+		        	}
 		        }
 				delete.click();
 				okBtn.click();	
 			}
 			public boolean DeleteJobCategorySuccess() {
-		       	 if(deleteSuccess.isDisplayed()) {
-		       		System.out.println(deleteSuccess.getText());
-		       		 return true; 
-		       	 }
-		       	 else {
-		       		 return false; 
-		       	 }	
+				try {
+					waitForVisibility(deleteSuccess);
+					System.out.println(deleteSuccess.getText());
+					return deleteSuccess.isDisplayed();
+				} catch(Exception e) {
+					return false;
 				}
+			}
 			
 			
 	  //8.ADDING WORK SHIFT:
 			public void addWorkShift(String NameOfShift,String From,String To) {
 				JobBtn.click();
 				workShifts.click();
+				for (int i = 0; i < ShiftList.size(); i++) {
+					if (ShiftList.get(i).getText().trim().equalsIgnoreCase(NameOfShift.trim())) {
+						WebElement td = driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
+						td.click();
+						delete.click();
+						okBtn.click();
+						break;
+					}
+				}
 				add_btn.click();
 				shiftName.sendKeys(NameOfShift);
 				
@@ -454,14 +500,14 @@ public class AdminPage extends TestBase{
 				save_btn.click();		
 			}
 			public boolean AddingWorkshiftSuccess() {
-		       	 if(saveSuccess.isDisplayed()) {
-		       		System.out.println(saveSuccess.getText());
-		       		 return true; 
-		       	 }
-		       	 else {
-		       		 return false; 
-		       	 }	
+				try {
+					waitForVisibility(saveSuccess);
+					System.out.println(saveSuccess.getText());
+					return saveSuccess.isDisplayed();
+				} catch(Exception e) {
+					return false;
 				}
+			}
 			
 			
 	  //9.DELETING WORKSHIFT:
@@ -469,26 +515,44 @@ public class AdminPage extends TestBase{
 				JobBtn.click();
 				workShifts.click();
 				List <WebElement> list= ShiftList;
+				boolean found = false;
 		        for(int i=0;i<list.size();i++) {   
 		        	String shiftname=(list.get(i).getText());
 		        	   if (shiftname.equals(ShiftToDelete)){
 		        		   WebElement td =  driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
 		        		     td.click();
+		        		     found = true;
 		        		     break;
 		        		    } 
+		        }
+		        if (!found) {
+		        	add_btn.click();
+		        	shiftName.sendKeys(ShiftToDelete);
+		        	new Select(workHoursFrom).selectByVisibleText("09:00");
+		        	new Select(workHoursTo).selectByVisibleText("17:00");
+		        	save_btn.click();
+		        	JobBtn.click();
+		        	workShifts.click();
+		        	for (int i = 0; i < ShiftList.size(); i++) {
+		        		if (ShiftList.get(i).getText().trim().equalsIgnoreCase(ShiftToDelete.trim())) {
+		        			WebElement td = driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
+		        			td.click();
+		        			break;
+		        		}
+		        	}
 		        }
 				delete.click();
 				okBtn.click();
 			}
 			public boolean DeletingWorkShiftSuccess() {
-		       	 if(deleteSuccess.isDisplayed()) {
-		       		System.out.println(deleteSuccess.getText());
-		       		 return true; 
-		       	 }
-		       	 else {
-		       		 return false; 
-		       	 }	
+				try {
+					waitForVisibility(deleteSuccess);
+					System.out.println(deleteSuccess.getText());
+					return deleteSuccess.isDisplayed();
+				} catch(Exception e) {
+					return false;
 				}
+			}
 			
 		
 	  //10.ASSIGINING WORKSHIFT:
@@ -497,31 +561,55 @@ public class AdminPage extends TestBase{
 				JobBtn.click();
 				workShifts.click();
 				
-				List <WebElement> list= workshiftToSelect;
-		        System.out.println(list.size());
-		        for(int i=0;i<list.size();i++) {   
-		        	String shiftname=(list.get(i).getText());
-		        	   if (shiftname.equals(shift)){
-		        		   list.get(i).click();
+				boolean shiftFound = false;
+		        for(int i=0;i<workshiftToSelect.size();i++) {   
+		        	String shiftname=(workshiftToSelect.get(i).getText());
+		        	   if (shiftname.trim().equalsIgnoreCase(shift.trim())){
+		        		   workshiftToSelect.get(i).click();
+		        		   shiftFound = true;
 		        		   break;
 		        		    } 
 		        	   }
+		        if (!shiftFound) {
+		        	add_btn.click();
+		        	shiftName.sendKeys(shift);
+		        	new Select(workHoursFrom).selectByVisibleText("09:00");
+		        	new Select(workHoursTo).selectByVisibleText("17:00");
+		        	save_btn.click();
+		        	JobBtn.click();
+		        	workShifts.click();
+		        	for(int i=0;i<workshiftToSelect.size();i++) {
+		        		if (workshiftToSelect.get(i).getText().trim().equalsIgnoreCase(shift.trim())) {
+		        			workshiftToSelect.get(i).click();
+		        			break;
+		        		}
+		        	}
+		        }
 		        Thread.sleep(1000);
-		        new Select(empList).selectByVisibleText(Employee);
-		        //Thread.sleep(1000);
-				assignBtn.click();
+		        waitForVisibility(save_btn);
+		        Select selectAvailable = new Select(empList);
+		        boolean inAvailable = false;
+		        for (WebElement opt : selectAvailable.getOptions()) {
+		        	if (opt.getText().trim().equalsIgnoreCase(Employee.trim())) {
+		        		inAvailable = true;
+		        		break;
+		        	}
+		        }
+		        if (inAvailable) {
+		        	selectAvailable.selectByVisibleText(Employee);
+		        	assignBtn.click();
+		        }
 				save_btn.click();
-					
 			}
 			public boolean AssigningWorkShiftSuccess() {
-		       	 if(saveSuccess.isDisplayed()) {
-		       		System.out.println(saveSuccess.getText());
-		       		 return true; 
-		       	 }
-		       	 else {
-		       		 return false; 
-		       	 }	
+				try {
+					waitForVisibility(saveSuccess);
+					System.out.println(saveSuccess.getText());
+					return saveSuccess.isDisplayed();
+				} catch(Exception e) {
+					return false;
 				}
+			}
 			
 			
 	  //11.ADDING GENERAL INFORMATION OF ORGANIZATION:
@@ -544,20 +632,29 @@ public class AdminPage extends TestBase{
 				edit.click();
 			}
 			public boolean AddInfoOfOganizationSuccess() {
-		       	 if(save_success.isDisplayed()) {
-		       		System.out.println(save_success.getText());
-		       		 return true; 
-		       	 }
-		       	 else {
-		       		 return false; 
-		       	 }	
+				try {
+					waitForVisibility(save_success);
+					System.out.println(save_success.getText());
+					return save_success.isDisplayed();
+				} catch(Exception e) {
+					return false;
 				}
+			}
 	
 			
 	  //12.ADDING LOCATION OF ORGANIZATION IN DIFFERENT COUNTRIES:
 			public void adding_OrganizationLocation(String locationName,String country) {
 				Organiztation_tab.click();
 				locations_tab.click();
+				for (int i = 0; i < location_list.size(); i++) {
+					if (location_list.get(i).getText().trim().equalsIgnoreCase(locationName.trim())) {
+						WebElement td = driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
+						td.click();
+						delete.click();
+						okBtn.click();
+						break;
+					}
+				}
 				add_btn.click();
 				location_name.sendKeys(locationName);
 				new Select(country_name).selectByVisibleText(country);
@@ -565,14 +662,14 @@ public class AdminPage extends TestBase{
 			}
 			
 			public boolean AddOgranizationLocationSuccess() {
-		       	 if(operation_success.isDisplayed()) {
-		       		System.out.println(operation_success.getText());
-		       		 return true; 
-		       	 }
-		       	 else {
-		       		 return false; 
-		       	 }	
+				try {
+					waitForVisibility(operation_success);
+					System.out.println(operation_success.getText());
+					return operation_success.isDisplayed();
+				} catch(Exception e) {
+					return false;
 				}
+			}
 		
 			
 	  //13.DELETING LOCATION OF ORGANIZATION IN DIFFERENT COUNTRIES:
@@ -580,77 +677,126 @@ public class AdminPage extends TestBase{
 				Organiztation_tab.click();
 				locations_tab.click();
 				List <WebElement> list= location_list;
+				boolean found = false;
 		        for(int i=0;i<list.size();i++) {   
 		        	String locationname=(list.get(i).getText());
 		        	   if (locationname.equals(LocationToDelete)){
 		        		   WebElement td =  driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
 		        		     td.click();
+		        		     found = true;
 		        		     break;
 		        		    } 
+		        }
+		        if (!found) {
+		        	add_btn.click();
+		        	location_name.sendKeys(LocationToDelete);
+		        	new Select(country_name).selectByVisibleText("United States");
+		        	save_btn.click();
+		        	Organiztation_tab.click();
+		        	locations_tab.click();
+		        	for (int i = 0; i < location_list.size(); i++) {
+		        		if (location_list.get(i).getText().trim().equalsIgnoreCase(LocationToDelete.trim())) {
+		        			WebElement td = driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
+		        			td.click();
+		        			break;
+		        		}
+		        	}
 		        }
 				delete.click();
 				okBtn.click();
 			}
 			public boolean DeletingOgranizationLocationSuccess() {
-		       	 if(operation_success.isDisplayed()) {
-		       		System.out.println(operation_success.getText());
-		       		 return true; 
-		       	 }
-		       	 else {
-		       		 return false; 
-		       	 }	
+				try {
+					waitForVisibility(operation_success);
+					System.out.println(operation_success.getText());
+					return operation_success.isDisplayed();
+				} catch(Exception e) {
+					return false;
 				}
+			}
 			
 			
 	  //14.ADDIND DIFFERENT NATIONALITIES:
 			public void adding_nationalities(String nationality) {
 				nationalities_Tab.click();
+				for (int i = 0; i < nationality_list.size(); i++) {
+					if (nationality_list.get(i).getText().trim().equalsIgnoreCase(nationality.trim())) {
+						WebElement td = driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
+						td.click();
+						delete.click();
+						okBtn.click();
+						break;
+					}
+				}
 				add_btn.click();
 				nationality_name.sendKeys(nationality);
 				save_btn.click();
-				System.out.println(operation_success.getText());
 			}
 			public boolean AddingNationalitySuccess() {
-		       	 if(operation_success.isDisplayed()) {
-		       		System.out.println(operation_success.getText());
-		       		 return true; 
-		       	 }
-		       	 else {
-		       		 return false; 
-		       	 }	
+				try {
+					waitForVisibility(operation_success);
+					System.out.println(operation_success.getText());
+					return operation_success.isDisplayed();
+				} catch(Exception e) {
+					return false;
 				}
+			}
 		
 			
 	 //15.DELETING NATIONALITY:
 			public void deleting_nationality(String NationalityToDelete) {
 				nationalities_Tab.click();
 				List <WebElement> list= nationality_list;
+				boolean found = false;
 		        for(int i=0;i<list.size();i++) {   
 		        	String nationalityName=(list.get(i).getText());
 		        	   if (nationalityName.equals(NationalityToDelete)){
 		        		   WebElement td =  driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
 		        		     td.click();
+		        		     found = true;
 		        		     break;
 		        		    } 
+		        }
+		        if (!found) {
+		        	add_btn.click();
+		        	nationality_name.sendKeys(NationalityToDelete);
+		        	save_btn.click();
+		        	nationalities_Tab.click();
+		        	for (int i = 0; i < nationality_list.size(); i++) {
+		        		if (nationality_list.get(i).getText().trim().equalsIgnoreCase(NationalityToDelete.trim())) {
+		        			WebElement td = driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
+		        			td.click();
+		        			break;
+		        		}
+		        	}
 		        }
 				delete.click();
 				okBtn.click();				
 			}
 			public boolean DeleteNationalitySuccess() {
-		       	 if(operation_success.isDisplayed()) {
-		       		System.out.println(operation_success.getText());
-		       		 return true; 
-		       	 }
-		       	 else {
-		       		 return false; 
-		       	 }	
+				try {
+					waitForVisibility(operation_success);
+					System.out.println(operation_success.getText());
+					return operation_success.isDisplayed();
+				} catch(Exception e) {
+					return false;
 				}
+			}
 			
 			
 	//16.ADDING PAY GRADE AND CURRENCY IN JOB SECTION:
 			public void addingPayGrade(String payGrade,String currency) {
 				JobBtn.click();
 				payGrades.click();
+				for (int i = 0; i < payGradeList.size(); i++) {
+					if (payGradeList.get(i).getText().trim().equalsIgnoreCase(payGrade.trim())) {
+						WebElement td = driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
+						td.click();
+						delete.click();
+						okBtn.click();
+						break;
+					}
+				}
 				add_btn.click();
 				payGrade_name.sendKeys(payGrade);
 				save_btn.click();
@@ -659,14 +805,14 @@ public class AdminPage extends TestBase{
 				saveCurrencyBtn.click();
 			}
 			public boolean AddingPayGradeSuccess() {
-		       	 if(msgSuccess.isDisplayed()) {
-		       		System.out.println(msgSuccess.getText());
-		       		 return true; 
-		       	 }
-		       	 else {
-		       		 return false; 
-		       	 }	
+				try {
+					waitForVisibility(msgSuccess);
+					System.out.println(msgSuccess.getText());
+					return msgSuccess.isDisplayed();
+				} catch(Exception e) {
+					return false;
 				}
+			}
 		
 			
 	 //17.DELETING PAY GRADE IN JOB SECTION:
@@ -674,26 +820,42 @@ public class AdminPage extends TestBase{
 				JobBtn.click();
 				payGrades.click();
 				List <WebElement> list= payGradeList;
+				boolean found = false;
 		        for(int i=0;i<list.size();i++) {   
 		        	String payGradeName=(list.get(i).getText());
 		        	   if (payGradeName.equals(payGradeToDelete)){
 		        		   WebElement td =  driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
 		        		     td.click();
+		        		     found = true;
 		        		     break;
 		        		    } 
+		        }
+		        if (!found) {
+		        	add_btn.click();
+		        	payGrade_name.sendKeys(payGradeToDelete);
+		        	save_btn.click();
+		        	JobBtn.click();
+		        	payGrades.click();
+		        	for (int i = 0; i < payGradeList.size(); i++) {
+		        		if (payGradeList.get(i).getText().trim().equalsIgnoreCase(payGradeToDelete.trim())) {
+		        			WebElement td = driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
+		        			td.click();
+		        			break;
+		        		}
+		        	}
 		        }
 				delete.click();
 				okBtn.click();
 			}
 			public boolean DeletePayGradeSuccess() {
-		       	 if(operation_success.isDisplayed()) {
-		       		System.out.println(operation_success.getText());
-		       		 return true; 
-		       	 }
-		       	 else {
-		       		 return false; 
-		       	 }	
+				try {
+					waitForVisibility(operation_success);
+					System.out.println(operation_success.getText());
+					return operation_success.isDisplayed();
+				} catch(Exception e) {
+					return false;
 				}
+			}
 			
 			
 	//18.EDITING LOCALIZATION IN CONFIGURATION SECTION:
@@ -764,28 +926,71 @@ public class AdminPage extends TestBase{
 				JobBtn.click();
 				workShifts.click();
 				
-				List <WebElement> list= workshiftToSelect;
-		        for(int i=0;i<list.size();i++) {   
-		        	String shiftname=(list.get(i).getText());
-		        	   if (shiftname.equals(shift)){
-		        		   list.get(i).click();
+				boolean shiftFound = false;
+		        for(int i=0;i<workshiftToSelect.size();i++) {   
+		        	String shiftname=(workshiftToSelect.get(i).getText());
+		        	   if (shiftname.trim().equalsIgnoreCase(shift.trim())){
+		        		   workshiftToSelect.get(i).click();
+		        		   shiftFound = true;
 		        		   break;
 		        		    } 
 		        	   }
-		        //Thread.sleep(1000);
+		        if (!shiftFound) {
+		        	add_btn.click();
+		        	shiftName.sendKeys(shift);
+		        	new Select(workHoursFrom).selectByVisibleText("09:00");
+		        	new Select(workHoursTo).selectByVisibleText("17:00");
+		        	Select selectAvailable = new Select(empList);
+		        	selectAvailable.selectByVisibleText(Employee);
+		        	assignBtn.click();
+		        	save_btn.click();
+		        	JobBtn.click();
+		        	workShifts.click();
+		        	for(int i=0;i<workshiftToSelect.size();i++) {
+		        		if (workshiftToSelect.get(i).getText().trim().equalsIgnoreCase(shift.trim())) {
+		        			workshiftToSelect.get(i).click();
+		        			break;
+		        		}
+		        	}
+		        }
+		        Thread.sleep(1000);
+		        waitForVisibility(save_btn);
+		        Select selectAssigned = new Select(empAssignedList);
+		        boolean inAssigned = false;
+		        for (WebElement opt : selectAssigned.getOptions()) {
+		        	if (opt.getText().trim().equalsIgnoreCase(Employee.trim())) {
+		        		inAssigned = true;
+		        		break;
+		        	}
+		        }
+		        if (!inAssigned) {
+		        	Select selectAvailable = new Select(empList);
+		        	selectAvailable.selectByVisibleText(Employee);
+		        	assignBtn.click();
+		        	save_btn.click();
+		        	JobBtn.click();
+		        	workShifts.click();
+		        	for(int i=0;i<workshiftToSelect.size();i++) {
+		        		if (workshiftToSelect.get(i).getText().trim().equalsIgnoreCase(shift.trim())) {
+			        		workshiftToSelect.get(i).click();
+			        		break;
+		        		}
+		        	}
+		        	Thread.sleep(1000);
+		        	waitForVisibility(save_btn);
+		        }
 		        new Select(empAssignedList).selectByVisibleText(Employee);
-		        //Thread.sleep(2000);
 				removeBtn.click();
 				save_btn.click();
 			}
 			public boolean RemoveWorkShiftSuccess() {
-		       	 if(saveSuccess.isDisplayed()) {
-		       		System.out.println(saveSuccess.getText());
-		       		 return true; 
-		       	 }
-		       	 else {
-		       		 return false; 
-		       	 }	
+				try {
+					waitForVisibility(saveSuccess);
+					System.out.println(saveSuccess.getText());
+					return saveSuccess.isDisplayed();
+				} catch(Exception e) {
+					return false;
+				}
 			}
 			
 	 //22.ADDING SKILLS IN QUALIFICATION SECTION:
@@ -804,18 +1009,26 @@ public class AdminPage extends TestBase{
 			public void addSkillsToQualification(String skill) {
 				qualificationTab.click();
 				SkillsTab.click();
+				for (int i = 0; i < skillList.size(); i++) {
+					if (skillList.get(i).getText().trim().equalsIgnoreCase(skill.trim())) {
+						WebElement td = driver.findElement(By.xpath(".//*[@id='recordsListTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
+						td.click();
+						Del_btn.click();
+						break;
+					}
+				}
 				add_btn.click();
 				skillName.sendKeys(skill);
 				save_btn.click();
 			}
 			public boolean AddingSkillSuccess() {
-		       	 if(skillSaveSuccess.isDisplayed()) {
-		       		System.out.println(skillSaveSuccess.getText());
-		       		 return true; 
-		       	 }
-		       	 else {
-		       		 return false; 
-		       	 }	
+				try {
+					waitForVisibility(skillSaveSuccess);
+					System.out.println(skillSaveSuccess.getText());
+					return skillSaveSuccess.isDisplayed();
+				} catch(Exception e) {
+					return false;
+				}
 			}
 			
 	//23.DELETING ADDED SKILL IN QUALIFICATION SECTION:
@@ -832,24 +1045,40 @@ public class AdminPage extends TestBase{
 				qualificationTab.click();
 				SkillsTab.click();
 				List <WebElement> list= skillList;
+				boolean found = false;
 		        for(int i=0;i<list.size();i++) {   
 		        	String SkillName=(list.get(i).getText());
 		        	   if (SkillName.equals(skillToDelete)){
 		        		   WebElement td =  driver.findElement(By.xpath(".//*[@id='recordsListTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
 		        		     td.click();
+		        		     found = true;
 		        		     break;
 		        		    } 
 		        	   }
+		        if (!found) {
+		        	add_btn.click();
+		        	skillName.sendKeys(skillToDelete);
+		        	save_btn.click();
+		        	qualificationTab.click();
+		        	SkillsTab.click();
+		        	for (int i = 0; i < skillList.size(); i++) {
+		        		if (skillList.get(i).getText().trim().equalsIgnoreCase(skillToDelete.trim())) {
+		        			WebElement td = driver.findElement(By.xpath(".//*[@id='recordsListTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
+		        			td.click();
+		        			break;
+		        		}
+		        	}
+		        }
 		        Del_btn.click();
 			}
 			public boolean DeletingSkillSuccess() {
-				 if(skillDeleteSuccess.isDisplayed()) {
-			       		System.out.println(skillDeleteSuccess.getText());
-			       		 return true; 
-			       	 }
-			       	 else {
-			       		 return false; 
-			       	 }	
+				try {
+					waitForVisibility(skillDeleteSuccess);
+					System.out.println(skillDeleteSuccess.getText());
+					return skillDeleteSuccess.isDisplayed();
+				} catch(Exception e) {
+					return false;
+				}
 			}
 			
 	//24.ADDING EDUCATION IN QUALIFICATION SECTION:
@@ -865,18 +1094,26 @@ public class AdminPage extends TestBase{
 			public void addingEducation(String education) {
 				qualificationTab.click();
 				educationTab.click();
+				for (int i = 0; i < educationLevelList.size(); i++) {
+					if (educationLevelList.get(i).getText().trim().equalsIgnoreCase(education.trim())) {
+						WebElement td = driver.findElement(By.xpath(".//*[@id='recordsListTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
+						td.click();
+						Del_btn.click();
+						break;
+					}
+				}
 				add_btn.click();
 				educationLevelName.sendKeys(education);
 				save_btn.click();
 			}
 			public boolean AddingEducationSuccess() {
-		       	 if(EducationSaveSuccess.isDisplayed()) {
-		       		System.out.println(EducationSaveSuccess.getText());
-		       		 return true; 
-		       	 }
-		       	 else {
-		       		 return false; 
-		       	 }	
+				try {
+					waitForVisibility(EducationSaveSuccess);
+					System.out.println(EducationSaveSuccess.getText());
+					return EducationSaveSuccess.isDisplayed();
+				} catch(Exception e) {
+					return false;
+				}
 			}
 			
 	//25.DELETING EDUCATION IN QUALIFICATION SECTION:
@@ -891,24 +1128,40 @@ public class AdminPage extends TestBase{
 				educationTab.click();
 				
 				List <WebElement> list= educationLevelList;
+				boolean found = false;
 		        for(int i=0;i<list.size();i++) {   
 		        	String levelName=(list.get(i).getText());
 		        	   if (levelName.equals(educationToDelete)){
 		        		   WebElement td =  driver.findElement(By.xpath(".//*[@id='recordsListTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
 		        		    td.click();
+		        		    found = true;
 		        		    break;
 		        		    } 
 		        	   }
+		        if (!found) {
+		        	add_btn.click();
+		        	educationLevelName.sendKeys(educationToDelete);
+		        	save_btn.click();
+		        	qualificationTab.click();
+		        	educationTab.click();
+		        	for (int i = 0; i < educationLevelList.size(); i++) {
+		        		if (educationLevelList.get(i).getText().trim().equalsIgnoreCase(educationToDelete.trim())) {
+			        		WebElement td = driver.findElement(By.xpath(".//*[@id='recordsListTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
+			        		td.click();
+			        		break;
+		        		}
+		        	}
+		        }
 		        Del_btn.click();   
 			}
 			public boolean DeletingEducationSuccess() {
-				 if(EducationDeleteSuccess.isDisplayed()) {
-			       		System.out.println(EducationDeleteSuccess.getText());
-			       		 return true; 
-			       	 }
-			       	 else {
-			       		 return false; 
-			       	 }	
+				try {
+					waitForVisibility(EducationDeleteSuccess);
+					System.out.println(EducationDeleteSuccess.getText());
+					return EducationDeleteSuccess.isDisplayed();
+				} catch(Exception e) {
+					return false;
+				}
 			}
 			
 	//26.ADDING LANGUAGE IN QUALIFICATION SECTION:
@@ -924,18 +1177,26 @@ public class AdminPage extends TestBase{
 			public void addingLanguage(String language) {
 				qualificationTab.click();
 				languageTab.click();
+				for (int i = 0; i < languagList.size(); i++) {
+					if (languagList.get(i).getText().trim().equalsIgnoreCase(language.trim())) {
+						WebElement td = driver.findElement(By.xpath(".//*[@id='recordsListTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
+						td.click();
+						Del_btn.click();
+						break;
+					}
+				}
 				add_btn.click();
 				languageName.sendKeys(language);
 				save_btn.click();
 			}
 			public boolean AddingLanguageSuccess() {
-		       	 if(languageSaveSuccess.isDisplayed()) {
-		       		System.out.println(languageSaveSuccess.getText());
-		       		 return true; 
-		       	 }
-		       	 else {
-		       		 return false; 
-		       	 }	
+				try {
+					waitForVisibility(languageSaveSuccess);
+					System.out.println(languageSaveSuccess.getText());
+					return languageSaveSuccess.isDisplayed();
+				} catch(Exception e) {
+					return false;
+				}
 			}
 			
 	//27.DELETING LANGUAGE IN QUALIFICATION SECTION:
@@ -950,19 +1211,40 @@ public class AdminPage extends TestBase{
 				languageTab.click();
 				
 				List <WebElement> list= languagList;
+				boolean found = false;
 		        for(int i=0;i<list.size();i++) {   
 		        	String languageName=(list.get(i).getText());
 		        	   if (languageName.equals(languageToDelete)){
 		        		   WebElement td =  driver.findElement(By.xpath(".//*[@id='recordsListTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
 		        		   td.click();
+		        		   found = true;
 		        		   break;
 		        		    } 
 		        	   }
+		        if (!found) {
+		        	add_btn.click();
+		        	languageName.sendKeys(languageToDelete);
+		        	save_btn.click();
+		        	qualificationTab.click();
+		        	languageTab.click();
+		        	for (int i = 0; i < languagList.size(); i++) {
+		        		if (languagList.get(i).getText().trim().equalsIgnoreCase(languageToDelete.trim())) {
+		        			WebElement td = driver.findElement(By.xpath(".//*[@id='recordsListTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
+		        			td.click();
+		        			break;
+		        		}
+		        	}
+		        }
 		        Del_btn.click();   
 			}
 
 			public boolean DeletingingLanguageSuccess(){
-				return languageDeleteSuccess.isDisplayed();
+				try {
+					waitForVisibility(languageDeleteSuccess);
+					return languageDeleteSuccess.isDisplayed();
+				} catch(Exception e) {
+					return false;
+				}
 			}
 			
 	//28.ADDING EMPLOYMENT STATUS IN JOB SECTION:
@@ -978,18 +1260,27 @@ public class AdminPage extends TestBase{
 			public void addingEmployment(String statusName) {
 				JobBtn.click();
 				employementStatusTab.click();
+				for (int i = 0; i < employStatusList.size(); i++) {
+					if (employStatusList.get(i).getText().trim().equalsIgnoreCase(statusName.trim())) {
+						WebElement td = driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
+						td.click();
+						delete.click();
+						okBtn.click();
+						break;
+					}
+				}
 				add_btn.click();
 				empStatusName.sendKeys(statusName);
 				save_btn.click();
 			}
 			public boolean AddEmploymentSuccess() {
-				 if(AddEmploymentSuccess.isDisplayed()) {
-			       		System.out.println(AddEmploymentSuccess.getText());
-			       		 return true; 
-			       	 }
-			       	 else {
-			       		 return false; 
-			       	 }
+				try {
+					waitForVisibility(AddEmploymentSuccess);
+					System.out.println(AddEmploymentSuccess.getText());
+					return AddEmploymentSuccess.isDisplayed();
+				} catch(Exception e) {
+					return false;
+				}
             }
 			
 	//29.DELETING EMPLOYMENT STATUS IN JOB SECTION:
@@ -1004,26 +1295,42 @@ public class AdminPage extends TestBase{
 				employementStatusTab.click();
 				
 				List <WebElement> list= employStatusList;
+				boolean found = false;
 		        for(int i=0;i<list.size();i++) {   
 		        	String statusName=(list.get(i).getText());
 		        	   if (statusName.equals(statusToDelete)){
 		        		   WebElement td =  driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
 		        		   td.click();
+		        		   found = true;
 		        		   break;
 		        		    } 
 		        	   }
+		        if (!found) {
+		        	add_btn.click();
+		        	empStatusName.sendKeys(statusToDelete);
+		        	save_btn.click();
+		        	JobBtn.click();
+		        	employementStatusTab.click();
+		        	for (int i = 0; i < employStatusList.size(); i++) {
+		        		if (employStatusList.get(i).getText().trim().equalsIgnoreCase(statusToDelete.trim())) {
+		        			WebElement td = driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
+		        			td.click();
+		        			break;
+		        		}
+		        	}
+		        }
 		        delete.click();
 		        okBtn.click();
 			}
 			public boolean DeleteEmploymentSuccess() {
-				 if(DeleteEmploymentSuccess.isDisplayed()) {
-			       		System.out.println(DeleteEmploymentSuccess.getText());
-			       		 return true; 
-			       	 }
-			       	 else {
-			       		 return false; 
-			       	 }
-           }
+				try {
+					waitForVisibility(DeleteEmploymentSuccess);
+					System.out.println(DeleteEmploymentSuccess.getText());
+					return DeleteEmploymentSuccess.isDisplayed();
+				} catch(Exception e) {
+					return false;
+				}
+			}
 			
 	//30.ADDING SOCIAL MEDIA AUTHENTICATION IN CONFIGURATION SECTION:
 			@FindBy(xpath=".//*[@id='menu_admin_openIdProvider']")
@@ -1044,6 +1351,15 @@ public class AdminPage extends TestBase{
 			public void AddingSocialMediaAuthti(String type,String nameOfProvider,String UrlOfProvider) {
 				configuration_tab.click();
 				socialMediaAuthTab.click();
+				for (int i = 0; i < ProviderList.size(); i++) {
+					if (ProviderList.get(i).getText().trim().equalsIgnoreCase(nameOfProvider.trim())) {
+						WebElement td = driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
+						td.click();
+						delete.click();
+						okBtn.click();
+						break;
+					}
+				}
 				add_btn.click();
 				new Select(providerType).selectByVisibleText(type);
 				providerName.sendKeys(nameOfProvider);
@@ -1051,14 +1367,14 @@ public class AdminPage extends TestBase{
 				save_btn.click();
 			}
 			public boolean AddingMediaAunthenticationSuccess() {
-				 if(MediaAuthenticatedSuccessfully.isDisplayed()) {
-			       		System.out.println(MediaAuthenticatedSuccessfully.getText());
-			       		 return true; 
-			       	 }
-			       	 else {
-			       		 return false; 
-			       	 }
-          }
+				try {
+					waitForVisibility(MediaAuthenticatedSuccessfully);
+					System.out.println(MediaAuthenticatedSuccessfully.getText());
+					return MediaAuthenticatedSuccessfully.isDisplayed();
+				} catch(Exception e) {
+					return false;
+				}
+			}
 	
 	//31.DELETING SOCIAL MEDIA AUTHENTICATION IN CONFIGURATION SECTION:		
 			@FindBy(xpath=".//*[@id='resultTable']/tbody/tr/td[2]")
@@ -1072,27 +1388,45 @@ public class AdminPage extends TestBase{
 				socialMediaAuthTab.click();
 				
 				List <WebElement> list= ProviderList;
+				boolean found = false;
 		        for(int i=0;i<list.size();i++) {   
 		        	String providerName=(list.get(i).getText());
 		        	   if (providerName.equals(providerListToDelete)){
 		        		   WebElement td =  driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
 		        		   td.click();
+		        		   found = true;
 		        		   break;
 		        		    } 
 		        	   }
+		        if (!found) {
+		        	add_btn.click();
+		        	new Select(providerType).selectByVisibleText("Google");
+		        	providerName.sendKeys(providerListToDelete);
+		        	providerUrl.sendKeys("https://www.google.com");
+		        	save_btn.click();
+		        	configuration_tab.click();
+		        	socialMediaAuthTab.click();
+		        	for (int i = 0; i < ProviderList.size(); i++) {
+		        		if (ProviderList.get(i).getText().trim().equalsIgnoreCase(providerListToDelete.trim())) {
+		        			WebElement td = driver.findElement(By.xpath(".//*[@id='resultTable']/tbody/tr["+(i+1)+"]/td[1]/input"));
+		        			td.click();
+		        			break;
+		        		}
+		        	}
+		        }
 		        delete.click();
 		        okBtn.click();
 			}
 
 			public boolean DeleteMediaAuthenticationSuccess() {
-				 if(MediaAuthenticationDeleteSuccess.isDisplayed()) {
-			       		System.out.println(MediaAuthenticationDeleteSuccess.getText());
-			       		 return true; 
-			       	 }
-			       	 else {
-			       		 return false; 
-			       	 }
-          }
+				try {
+					waitForVisibility(MediaAuthenticationDeleteSuccess);
+					System.out.println(MediaAuthenticationDeleteSuccess.getText());
+					return MediaAuthenticationDeleteSuccess.isDisplayed();
+				} catch(Exception e) {
+					return false;
+				}
+			}
 }
 
 

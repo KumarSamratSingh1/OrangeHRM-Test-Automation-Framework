@@ -26,7 +26,7 @@ public class DeleteCandidate extends TestBase{
 		topnevigationmenupage=new TopNevigationMenuPage();
 	}
 	
-	@Test(dependsOnGroups= {"AddCandidate"},description="HRMS-79:Verify that user is able to delete the candidates from Recruitment tab")
+	@Test(description="HRMS-79:Verify that user is able to delete the candidates from Recruitment tab")
 	public void verifyDeleteCandidatedFunctionality(){
 		try{
 			Log.startTestCase("----Delete Candidate Test Case Started");

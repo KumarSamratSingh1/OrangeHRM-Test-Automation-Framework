@@ -58,6 +58,7 @@ public class FunctionalityofAddEmployee extends TestBase {
 			takeScreenShot("Add Employee tab Clicked");
 			AddEmployeePage addemployeepage=new AddEmployeePage();
 			addemployeepage.clickOnSaveButton();
+			Thread.sleep(3000);
 			takeScreenShot("Employee is Added");
 			employeelistpage=new EmployeeListPage();
 			pimpageobjects.clickOnEmployeeList();

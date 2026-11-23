@@ -50,6 +50,7 @@ public class Trackers_UpdateEmployeePerformanceRecord extends TestBase {
 			performancePage.AddAvailableReviewertoAssignedReviewver();	
 			performancePage.enterEmployeeNameTextBox("Pallavi Yadav");
 			performancePage.clickTrackersSaveBtn();
+			Assert.assertTrue(performancePage.SaveSuccessMessage());
 			performancePage.UpdateEmpPerformanceRecord("Jr. Software Engg.","Yogiraj Ghumade");
 			Assert.assertEquals("Jr. Software Engg.",performancePage.getPerformanceTrackerRecord());
 		}

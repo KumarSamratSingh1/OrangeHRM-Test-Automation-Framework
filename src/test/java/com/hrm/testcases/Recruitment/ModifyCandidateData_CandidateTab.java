@@ -36,6 +36,12 @@ public class ModifyCandidateData_CandidateTab extends TestBase{
 			Log.info("Login Successful: User is on Dashboard page");
 			recruitmentPage=dashboardPage.clickOnRecruitmentTab();	
 			Log.info("User Navigated to Recruitment Page");
+			if(!recruitmentPage.verifyCandidatePresent(TestConfig.CANDIDATE_FULL_NAME)) {
+				recruitmentPage.clickOnAddButton();
+				recruitmentPage.addCandidateDetails();
+				recruitmentPage.clickOnSaveButton();
+				recruitmentPage.clickOnBackButton();
+			}
 			recruitmentPage.clickOnCandidateName(TestConfig.CANDIDATE_FULL_NAME);
 			Log.info("User navigated to Edit Candidate Information Page");
 			recruitmentPage.clickOnSaveButton();

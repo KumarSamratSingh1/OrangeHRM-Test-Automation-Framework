@@ -36,7 +36,7 @@ public class SearchUserFunctionality extends TestBase{
 			    usermgmtpage=dashboardPage.clickOnAdminTab();
 			    Log.info("Admin tab Clicked");
 			    takeScreenShot("Admin tab Clicked");
-			    usermgmtpage.searchUser("neelam1234","Neelam Kumawat");
+			    usermgmtpage.searchUser(Config.getProperty("username"),"");
 			    Log.info("User Searched Successfully");
 			    Assert.assertEquals(true, usermgmtpage.SearchingUserSuccessText());
 			    Log.info("Test Case Pass");
@@ -44,6 +44,7 @@ public class SearchUserFunctionality extends TestBase{
 			}
 			catch(Exception e){
 				e.printStackTrace();
+				Assert.fail(e.getMessage());
 			}	
 			finally{
 				topnevigationmenupage.ClickOnUserName();

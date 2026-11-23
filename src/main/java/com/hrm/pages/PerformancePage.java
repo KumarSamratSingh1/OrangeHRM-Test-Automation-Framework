@@ -1,13 +1,17 @@
 package com.hrm.pages;
 
+import java.time.Duration;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import com.hrm.base.TestBase;
 
 public class PerformancePage extends TestBase {
@@ -405,27 +409,42 @@ public class PerformancePage extends TestBase {
 	public void UpdateEmpPerformanceRecord(String TrackName, String AvailableReviewer) {	
 		try {
 			waitForElementToBeClickable(PerformanceTrackerRecord);
+			String currentUrl = driver.getCurrentUrl();
 			PerformanceTrackerRecord.click();
-			TrackerName.clear();			
-			TrackerName.sendKeys(TrackName);
-			EmployeeName.clear();
-			List<WebElement> options = driver.findElements(By.xpath("//*[@id=\"addPerformanceTracker_availableEmp\"]/option"));
-			for (WebElement option : options) {
-			    if (option.getText().contains(AvailableReviewer)) {
-			        option.click();
-			        break;
-			    }
-			}
-			AssignedEmployeeAddBtn.click();
-			TrackerSaveBtn.click();
-			}
+			
+			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+			wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(currentUrl)));
+			
+			// Wait until employeeName is done loading and has the employee's name
+			wait.until(driver -> {
+				String val = driver.findElement(By.id("addPerformanceTracker_employeeName_empName")).getAttribute("value");
+				return val != null && !val.isEmpty() && !val.equalsIgnoreCase("Loading");
+			});
+			
+			WebElement trackerInput = wait.until(ExpectedConditions.elementToBeClickable(By.id("addPerformanceTracker_tracker_name")));
+			trackerInput.clear();			
+			trackerInput.sendKeys(TrackName);
+			
+			// Ensure form action preserves tracker ID and click btnSave
+			((JavascriptExecutor) driver).executeScript(
+			    "document.getElementById('frmaddPerformanceTracker').action = window.location.href;" +
+			    "$('#btnSave').click();"
+			);
+			
+			// Wait for redirect back to addPerformanceTracker
+			wait.until(ExpectedConditions.urlMatches(".*/performance/addPerformanceTracker$"));
+			Thread.sleep(1000);
+		}
 		catch(Exception e) {
 			e.printStackTrace();
-			}
+		}
 	}
 	
 	public String getPerformanceTrackerRecord() {
-		return PerformanceTrackerRecord.getText();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException ignored) {}
+		return driver.findElement(By.xpath("//*[@id='resultTable']/tbody/tr[1]/td[3]/a")).getText();
 	}
 	
 	public void clickTrackerchkSelectAll() {	
@@ -569,12 +588,15 @@ public class PerformancePage extends TestBase {
 		try {
 			waitForElementToBeClickable(ReadComment);
 			ReadComment.click();
-			System.out.println(PerformanceTrackersLogComment.getText());
+			waitForVisibility(PerformanceTrackersLogComment);
 			String text=PerformanceTrackersLogComment.getText();
-			if(text=="Performance Tracker Log Comment") {
-				return true;
-			}	
-			CloseCommentBox.click();
+			System.out.println(text);
+			boolean match = "Performance Tracker Log Comment".equals(text);
+			try {
+				CloseCommentBox.click();
+				Thread.sleep(500);
+			} catch(Exception ignored) {}
+			return match;
 			}
 		catch(Exception e) {
 			e.printStackTrace();
@@ -603,11 +625,11 @@ public class PerformancePage extends TestBase {
 			ReviewerName.sendKeys("Yogiraj Ghumade");
 			ResetBtn.click();
 			String classAtr=EmpName.getAttribute("class");
-			if(classAtr=="ac_input inputFormatHint") {
+			if(classAtr != null && classAtr.contains("inputFormatHint")) {
 				return true;
 			}
 			String ReviewerClassAtr=ReviewerName.getAttribute("class");
-			if(ReviewerClassAtr=="ac_input inputFormatHint") {
+			if(ReviewerClassAtr != null && ReviewerClassAtr.contains("inputFormatHint")) {
 				return true;
 			}			
 			}

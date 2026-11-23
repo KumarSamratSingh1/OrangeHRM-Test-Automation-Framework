@@ -27,10 +27,10 @@ public class LoginTest extends TestBase{
 		topnevigationmenupage=new TopNevigationMenuPage();
 	}
 	
-	@Test
+	@Test(priority = 1, description = "HRMS-1: Verify Successful Login with Valid Credentials")
 	public void SucessfullLoginTest() throws IOException {	
 		try{
-			Log.startTestCase("LoginTest");
+			Log.startTestCase("ValidLoginTest");
 			String username= Config.getProperty("username");
 			Log.info("Username entered in the Username text box");
 			String password= Config.getProperty("password");
@@ -42,14 +42,30 @@ public class LoginTest extends TestBase{
 		}
 		catch(Exception e){
 			e.printStackTrace();
-			Assert.assertFalse(true, "Could not login.");
+			Assert.fail("Valid login failed: " + e.getMessage());
 		}	
+	}
+
+	@Test(priority = 2, description = "HRMS-1B: Verify Invalid Credentials Rejection")
+	public void InvalidLoginTest() throws IOException {
+		try {
+			Log.startTestCase("InvalidLoginTest");
+			loginPage.loginToApp("invalid_admin_xyz", "badpassword123");
+			String error = loginPage.getErrorMessage();
+			Log.info("Error message displayed: " + error);
+			Assert.assertTrue(error.contains("Invalid credentials"), "Expected 'Invalid credentials' but got: " + error);
+			takeScreenShot("Invalid Credentials Error");
+		}
+		catch(Exception e){
+			e.printStackTrace();
+			Assert.fail("Invalid login verification failed: " + e.getMessage());
+		}
 	}
 	
 	@AfterMethod
 	public void tearDown(){
 		try {
-			if (topnevigationmenupage != null) {
+			if (driver != null && driver.getCurrentUrl().contains("dashboard") && topnevigationmenupage != null) {
 				topnevigationmenupage.ClickOnUserName();
 			}
 		} catch (Exception ignored) {

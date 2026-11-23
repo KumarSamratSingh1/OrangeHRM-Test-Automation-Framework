@@ -22,6 +22,17 @@ public class LoginPage extends TestBase{
 	@FindBy(id="btnLogin")
 	WebElement Loginbutton;
 	
+	@FindBy(id="spanMessage")
+	WebElement errorMessage;
+	
+	public String getErrorMessage() {
+		try {
+			return errorMessage.getText();
+		} catch (Exception e) {
+			return "";
+		}
+	}
+	
 	//Enter username in username textbox
 	public void setUserName(String userName){
 		LoginUserName.clear();

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <suite name="Orange HRM Complete Automation Test Suite" verbose="1">
   <listeners>
     <listener class-name="com.hrm.util.ExtentReporterNG"/>
@@ -67,8 +67,6 @@
       <!-- Recruitment Module (20 classes) -->
       <class name="com.hrm.testcases.Recruitment.AddCandidate"/>
       <class name="com.hrm.testcases.Recruitment.AddJobVacancies"/>
-      <class name="com.hrm.testcases.Recruitment.DeleteCandidate"/>
-      <class name="com.hrm.testcases.Recruitment.DeleteJobVacancy"/>
       <class name="com.hrm.testcases.Recruitment.DownnloadCandidateResume"/>
       <class name="com.hrm.testcases.Recruitment.ModifyCandidateData_CandidateTab"/>
       <class name="com.hrm.testcases.Recruitment.ModifyJobVacancyData_VacancyTab"/>
@@ -85,6 +83,8 @@
       <class name="com.hrm.testcases.Recruitment.SearchJobVacancy_VacancyName"/>
       <class name="com.hrm.testcases.Recruitment.VerifyCandidatesTab"/>
       <class name="com.hrm.testcases.Recruitment.VerifyRecruitmentTab"/>
+      <class name="com.hrm.testcases.Recruitment.DeleteCandidate"/>
+      <class name="com.hrm.testcases.Recruitment.DeleteJobVacancy"/>
       <!-- Performance Module (19 classes) -->
       <class name="com.hrm.testcases.PerformancePage.AddKeyPerformanceIndicator"/>
       <class name="com.hrm.testcases.PerformancePage.CancleToFillInfoOf_KeyPerformanceIndicator"/>
@@ -135,3 +135,4 @@
     </classes>
   </test>
 </suite>
+

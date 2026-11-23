@@ -56,3 +56,14 @@ testng-failed.xml
 .DS_Store
 Thumbs.db
 
+
+
+
+# Local backups, verification and evidence
+Project_Backup_MasterFix/
+Project_Backup_PreDemo/
+TOMORROW_DEMO_PACKAGE/
+Final_Project_Verification/
+Final_Report_Evidence/
+*.zip
+UPDATED_EXTENT_REPORT.html

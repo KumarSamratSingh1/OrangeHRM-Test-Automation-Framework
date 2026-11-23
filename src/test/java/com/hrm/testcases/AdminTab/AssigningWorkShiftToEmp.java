@@ -44,6 +44,7 @@ public class AssigningWorkShiftToEmp extends TestBase{
 			}
 			catch(Exception e){
 				e.printStackTrace();
+				Assert.fail(e.getMessage());
 			}	
 			finally{
 				topnevigationmenupage.ClickOnUserName();
